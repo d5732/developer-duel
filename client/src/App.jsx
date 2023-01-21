@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar } from "./components";
 import { inspectUser, duelUsers } from "./services/userService";
 import { useEffect } from "react";
-import { Home } from "./components/Home";
+import Home from "./components/Home/Home";
+import Inspect from "./components/Inspect/Inspect";
+import Duel from "./components/Duel/Duel";
 
 function App() {
     // Hook that runs after React has updated the DOM
@@ -16,7 +18,9 @@ function App() {
             <GlobalStyles />
             <Navbar />
             <Switch>
-                <Route path="/" component={Home} />
+                <Route exact path="/inspect" component={Inspect} />
+                <Route exact path="/duel" component={Duel} />
+                <Route exact path="/" component={Home} />
             </Switch>
         </Router>
     );
