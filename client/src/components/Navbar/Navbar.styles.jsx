@@ -12,6 +12,7 @@ export const NavbarContainer = styled.div`
     justify-content: space-evenly;
     align-items: center;
     height: 134px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 export const Menu = styled.ul`

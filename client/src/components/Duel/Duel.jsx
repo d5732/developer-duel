@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { duelUsers } from "../../services/userService";
 import Input from "../Shared/Input";
-import Profile from "../Shared/Profile";
+import ProfileCard from "../Shared/ProfileCard";
 import ResponseError from "../Shared/ResponseError";
+import Winner from "./Winner";
 import { Button, Main } from "../Shared/Shared.styles";
 
 const Duel = () => {
+    const [loading, setLoading] = useState(false);
     const [responseError, setResponseError] = useState();
     const [profileData0, setProfileData0] = useState();
     const [profileData1, setProfileData1] = useState();
@@ -13,6 +15,7 @@ const Duel = () => {
     const [error1, setError1] = useState("");
     const [username0, setUsername0] = useState("");
     const [username1, setUsername1] = useState("");
+    const [winner, setWinner] = useState();
     const props0 = {
         error: error0,
         setError: setError0,
@@ -27,12 +30,19 @@ const Duel = () => {
     };
 
     const handleDuelUsers = async ({ username0, username1 }) => {
+        setResponseError();
+        setProfileData0();
+        setProfileData1();
+        setWinner();
+        setLoading(true);
         //todo: can there be a tie?
         //todo: what happens if username0===username1?
         const res = await duelUsers(username0, username1);
         if (res?.message) {
+            setLoading(false);
             setResponseError(res.message);
         } else {
+            setLoading(false);
             console.log(res[0]);
             console.log(res[1]);
             setProfileData0(res[0]);
@@ -40,9 +50,11 @@ const Duel = () => {
             if (JSON.stringify(res[0]) > JSON.stringify(res[1])) {
                 // 0 wins
                 console.log("duel result: winner is", res[0].username);
+                setWinner(0);
             } else {
                 // 1 wins
                 console.log("duel result: winner is", res[1].username);
+                setWinner(1);
             }
         }
     };
@@ -62,49 +74,19 @@ const Duel = () => {
             >
                 Duel
             </Button>
-            <div style={{ display: "flex", gap: "2rem" }}>
-                {profileData0 && <Profile data={profileData0} />}
-                {profileData1 && <Profile data={profileData1} />}
+            {username0 && username1 && username0 === username1 && (
+                <ResponseError message={"Cannot duel self"} />
+            )}
+            {loading && <div>Loading...</div>}
+            {winner === 0 && <Winner style={{ color: "pink" }} />}
+            {winner === 1 && <Winner />}
+            <div style={{ display: "flex", gap: "1rem" }}>
                 {responseError && <ResponseError message={responseError} />}
-                {username0 && username1 && username0 === username1 && (
-                    <ResponseError message={"Cannot duel self"} />
-                )}
+                {profileData0 && <ProfileCard data={profileData0} />}
+                {profileData1 && <ProfileCard data={profileData1} />}
             </div>
         </Main>
     );
 };
 
 export default Duel;
-
-// [
-//     {
-//         username: "fabpot",
-//         name: "Fabien Potencier",
-//         location: "Lille, France",
-//         bio: "CEO at Symfony, CPO at Platform.sh\r\n",
-//         avatar_url: "https://avatars.githubusercontent.com/u/47313?v=4",
-//         titles: ["Forker", "Mr. Popular"],
-//         "favorite-language": "PHP",
-//         "public-repos": 72,
-//         "total-stars": 1231,
-//         "highest-starred": 1000,
-//         "perfect-repos": 2,
-//         followers: 12755,
-//         following: 0,
-//     },
-//     {
-//         username: "andrew",
-//         name: "Andrew Nesbitt",
-//         location: "UK",
-//         bio: "Software engineer and researcher",
-//         avatar_url: "https://avatars.githubusercontent.com/u/1060?v=4",
-//         titles: ["Forker"],
-//         "favorite-language": "JavaScript",
-//         "public-repos": 309,
-//         "total-stars": 62,
-//         "highest-starred": 23,
-//         "perfect-repos": 11,
-//         followers: 3083,
-//         following: 3161,
-//     },
-// ];

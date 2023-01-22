@@ -6,13 +6,16 @@ import {
     ProfileValue,
     Bio,
     Avatar,
+    AvatarBioContainer,
 } from "./Shared.styles.jsx";
 
-const Profile = ({ data }) => {
+const ProfileCard = ({ data }) => {
     return (
         <ProfileContainer>
-            <Avatar src={data?.avatar_url}></Avatar>
-            <Bio>{data?.bio}</Bio>
+            <AvatarBioContainer>
+                <Avatar src={data?.avatar_url}></Avatar>
+                <Bio>{data?.bio}</Bio>
+            </AvatarBioContainer>
             <ProfileDetailsContainer>
                 <ProfileDetail>
                     <ProfileLabel>username</ProfileLabel>
@@ -28,7 +31,7 @@ const Profile = ({ data }) => {
                 </ProfileDetail>
                 <ProfileDetail>
                     <ProfileLabel>titles</ProfileLabel>
-                    <ProfileValue>{data?.titles}</ProfileValue>
+                    <ProfileValue>{data?.titles?.join(", ")}</ProfileValue>
                 </ProfileDetail>
                 <ProfileDetail>
                     <ProfileLabel>fav language</ProfileLabel>
@@ -63,4 +66,4 @@ const Profile = ({ data }) => {
     );
 };
 
-export default Profile;
+export default ProfileCard;

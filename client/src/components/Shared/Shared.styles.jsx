@@ -12,8 +12,8 @@ export const Main = styled.main`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin-top: 10rem;
-    gap: 78px;
+    gap: 4rem;
+    margin-top: 4rem;
 `;
 
 export const ErrorDisplay = styled.div`
@@ -29,14 +29,20 @@ export const ErrorDisplay = styled.div`
 `;
 
 export const ProfileContainer = styled.article`
+    position: relative;
+    display: grid;
+    width: 649px;
+    padding: 1.5rem;
+    grid-template-columns: 1fr 3fr;
     border: 1px solid black;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    font-family: "Roboto", sans-serif;
 `;
 
 export const ProfileDetailsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
 `;
 
 export const ProfileDetail = styled.div`
@@ -46,36 +52,40 @@ export const ProfileDetail = styled.div`
 `;
 
 export const ProfileLabel = styled.span`
-    width: 107px;
-    height: 26px;
     border: 1px solid rgba(0, 0, 0, 0.75);
+    width: 14rem;
     border-radius: 5px;
-    font-size: 13px;
-    line-height: 15px;
+    font-size: 1.4rem;
     background: #e1f1ff;
     text-align: center;
+    padding: 0.25rem;
 `;
 
 export const ProfileValue = styled.span`
-    font-size: 24px;
-    line-height: 28px;
+    font-size: 2.25rem;
 `;
 
 export const Bio = styled.div`
-    font-size: 14px;
-    line-height: 16px;
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 300;
+    font-size: 1.5rem;
     text-align: center;
 `;
 
 export const Avatar = styled.img`
     border-radius: 100%;
-    height: 104px;
-    width: 104px;
+    width: 103px;
+    height: 103px;
 `;
 
 export const AvatarBioContainer = styled.div`
+    margin: auto;
+    margin-right: 2rem;
+    margin-left: 2rem;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2rem;
 `;
 
@@ -109,6 +119,5 @@ export const TextInput = styled.input`
     border: 1px solid rgba(0, 0, 0, 0.75);
     text-align: center;
     padding: 1rem;
-    font-size: 26px;
-    line-height: 30px;
+    font-size: 2.5rem;
 `;
