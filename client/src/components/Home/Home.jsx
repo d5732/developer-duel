@@ -4,8 +4,12 @@ import { Main, ButtonLink } from "../Shared/Shared.styles";
 const Home = () => {
     return (
         <Main>
-            <h1>Welcome to Dev-Duel</h1>
-            <div style={{ display: "flex", gap: "4rem", textAlign: "center" }}>
+            <h1 style={{ marginTop: "17rem", marginBottom: "7.8rem" }}>
+                Welcome to Dev-Duel
+            </h1>
+            <div
+                style={{ display: "flex", gap: "6.7rem", textAlign: "center" }}
+            >
                 <div
                     style={{
                         display: "flex",

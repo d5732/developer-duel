@@ -9,7 +9,15 @@ import {
     AvatarBioContainer,
 } from "./Shared.styles.jsx";
 
-const ProfileCard = ({ data }) => {
+const ProfileCard = ({ data, tie, isWinner }) => {
+    let winConditionStyle = {};
+    if (tie === true) {
+        winConditionStyle.color = "orange";
+    } else if (isWinner === true) {
+        winConditionStyle.color = "lime";
+    } else if (isWinner === false) {
+        winConditionStyle.color = "red";
+    }
     return (
         <ProfileContainer>
             <AvatarBioContainer>
@@ -39,7 +47,11 @@ const ProfileCard = ({ data }) => {
                 </ProfileDetail>
                 <ProfileDetail>
                     <ProfileLabel>total stars</ProfileLabel>
-                    <ProfileValue>{data?.["total-stars"]}</ProfileValue>
+                    <ProfileValue>
+                        <span style={{ ...winConditionStyle }}>
+                            {data?.["total-stars"]}
+                        </span>
+                    </ProfileValue>
                 </ProfileDetail>
                 <ProfileDetail>
                     <ProfileLabel>highest star count</ProfileLabel>

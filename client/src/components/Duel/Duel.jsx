@@ -2,61 +2,71 @@ import { useState } from "react";
 import { duelUsers } from "../../services/userService";
 import Input from "../Shared/Input";
 import ProfileCard from "../Shared/ProfileCard";
-import ResponseError from "../Shared/ResponseError";
+import Error from "../Shared/Error";
 import Winner from "./Winner";
+import Tie from "./Tie";
 import { Button, Main } from "../Shared/Shared.styles";
 
 const Duel = () => {
+    const [error, setError] = useState();
     const [loading, setLoading] = useState(false);
-    const [responseError, setResponseError] = useState();
     const [profileData0, setProfileData0] = useState();
     const [profileData1, setProfileData1] = useState();
-    const [error0, setError0] = useState("");
-    const [error1, setError1] = useState("");
+    const [inputError0, setInputError0] = useState("");
+    const [inputError1, setInputError1] = useState("");
     const [username0, setUsername0] = useState("");
     const [username1, setUsername1] = useState("");
     const [winner, setWinner] = useState();
+    const [tie, setTie] = useState();
     const props0 = {
-        error: error0,
-        setError: setError0,
+        error: inputError0,
+        setError: setInputError0,
         username: username0,
         setUsername: setUsername0,
+        comparand: username1,
     };
     const props1 = {
-        error: error1,
-        setError: setError1,
+        error: inputError1,
+        setError: setInputError1,
         username: username1,
         setUsername: setUsername1,
+        comparand: username0,
     };
 
-    const handleDuelUsers = async ({ username0, username1 }) => {
-        setResponseError();
+    const handleDuelUsers = ({ username0, username1 }) => {
+        setLoading(true);
+        setError();
         setProfileData0();
         setProfileData1();
         setWinner();
-        setLoading(true);
-        //todo: can there be a tie?
-        //todo: what happens if username0===username1?
-        const res = await duelUsers(username0, username1);
-        if (res?.message) {
-            setLoading(false);
-            setResponseError(res.message);
-        } else {
-            setLoading(false);
-            console.log(res[0]);
-            console.log(res[1]);
-            setProfileData0(res[0]);
-            setProfileData1(res[1]);
-            if (JSON.stringify(res[0]) > JSON.stringify(res[1])) {
-                // 0 wins
-                console.log("duel result: winner is", res[0].username);
-                setWinner(0);
-            } else {
-                // 1 wins
-                console.log("duel result: winner is", res[1].username);
-                setWinner(1);
-            }
-        }
+        setTie();
+
+        duelUsers(username0, username1)
+            .then((res) => {
+                if (res?.message) {
+                    console.log("res:", res);
+                    setError(res.message);
+                } else {
+                    setProfileData0(res[0]);
+                    setProfileData1(res[1]);
+                    if (res[0]["total-stars"] === res[1]["total-stars"]) {
+                        setTie(true);
+                    } else if (res[0]["total-stars"] > res[1]["total-stars"]) {
+                        console.log("duel result: winner is", res[0].username);
+                        setWinner(0);
+                    } else {
+                        console.log("duel result: winner is", res[1].username);
+                        setWinner(1);
+                    }
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                setError(err.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     return (
@@ -66,24 +76,45 @@ const Duel = () => {
                 <Input {...props1} />
             </div>
             <Button
-                disabled={error0 || error1 || username0 === username1}
+                disabled={
+                    loading ||
+                    inputError0 ||
+                    inputError1 ||
+                    username0 === username1
+                }
+                loading={loading ? "true" : undefined}
                 onClick={() => {
-                    console.log("duel:", username0, username1);
                     handleDuelUsers({ username0, username1 });
                 }}
             >
                 Duel
             </Button>
-            {username0 && username1 && username0 === username1 && (
-                <ResponseError message={"Cannot duel self"} />
-            )}
+
             {loading && <div>Loading...</div>}
-            {winner === 0 && <Winner style={{ color: "pink" }} />}
-            {winner === 1 && <Winner />}
+            {error && <Error message={error} />}
+
+            {tie === true && <Tie />}
+            {winner === 0 && (
+                <Winner style={{ marginRight: "calc(649px + 1rem)" }} />
+            )}
+            {winner === 1 && (
+                <Winner style={{ marginLeft: "calc(649px + 1rem)" }} />
+            )}
             <div style={{ display: "flex", gap: "1rem" }}>
-                {responseError && <ResponseError message={responseError} />}
-                {profileData0 && <ProfileCard data={profileData0} />}
-                {profileData1 && <ProfileCard data={profileData1} />}
+                {profileData0 && (
+                    <ProfileCard
+                        data={profileData0}
+                        isWinner={winner === 0}
+                        tie={tie}
+                    />
+                )}
+                {profileData1 && (
+                    <ProfileCard
+                        data={profileData1}
+                        isWinner={winner === 1}
+                        tie={tie}
+                    />
+                )}
             </div>
         </Main>
     );

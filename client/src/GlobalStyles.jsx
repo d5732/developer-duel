@@ -6,8 +6,8 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: inherit;
-    border-radius: 1rem;
 }
+
 
 a, a:visited {
     color: #581DFF;
@@ -35,7 +35,7 @@ body {
     font-weight: 400;
     font-size: 1.6rem;
     background: #F9F9F9;
-    color: #333;
+    color: #000;
 }
 
 h1 {

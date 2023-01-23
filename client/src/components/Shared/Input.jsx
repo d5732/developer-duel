@@ -1,21 +1,39 @@
 import { isValidUsername } from "../../services/userService";
-import { ErrorDisplay, TextInput } from "./Shared.styles";
+import { TextInput } from "./Shared.styles";
+import ErrorTooltip from "./ErrorTooltip";
 
-const Input = ({ username, setUsername, error, setError }) => {
+const Input = ({ username, setUsername, error, setError, comparand }) => {
     const handleInput = (e) => {
         setUsername(e.target.value);
-        console.log(isValidUsername(e.target.value));
         if (!isValidUsername(e.target.value, { error, setError })) {
-            !error && setError("Invalid username");
+            setError("Invalid username");
+        } else if (e.target.value === comparand) {
+            setError("Cannot duel self");
         } else if (error && isValidUsername(e.target.value)) {
-            setError("");
+            setError();
+        }
+    };
+    const handleBlur = () => {
+        if (error === "Cannot duel self") {
+            setError();
+        }
+    };
+
+    const handleFocus = () => {
+        if (username === comparand) {
+            setError("Cannot duel self");
         }
     };
 
     return (
         <div style={{ position: "relative" }}>
-            {error && username && <ErrorDisplay>{error}</ErrorDisplay>}
-            <TextInput placeholder="username" onInput={handleInput} />
+            {error && username && <ErrorTooltip text={error} />}
+            <TextInput
+                placeholder="username"
+                onInput={handleInput}
+                onBlur={handleBlur}
+                onFocus={handleFocus}
+            />
         </div>
     );
 };

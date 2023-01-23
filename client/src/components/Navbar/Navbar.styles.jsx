@@ -3,20 +3,15 @@ import { NavLink } from "react-router-dom";
 
 export const Nav = styled.nav`
     font-size: 18px;
-    height: 100%;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
-`;
-
-export const NavbarContainer = styled.div`
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
     height: 134px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 export const Menu = styled.ul`
     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 `;
 
 export const MenuItem = styled.li`
